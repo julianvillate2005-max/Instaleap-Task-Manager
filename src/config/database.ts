@@ -1,19 +1,16 @@
 
 import { Pool } from "pg";
-import dotenv from "dotenv";
-
-dotenv.config();
+import { env } from "./env.js";
 
 /**
  * Pool de conexiones reutilizables a PostgreSQL.
- * Evita abrir una conexión nueva para cada consulta.
  */
 export const database = new Pool({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT) || 5432,
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+  host: env.database.host,
+  port: env.database.port,
+  database: env.database.name,
+  user: env.database.user,
+  password: env.database.password,
 });
 
 /**
@@ -24,6 +21,7 @@ export async function verificarConexion(): Promise<void> {
 
   try {
     const resultado = await client.query("SELECT NOW() AS fecha_servidor");
+
     console.log("Conexión con PostgreSQL establecida.");
     console.log("Fecha del servidor:", resultado.rows[0].fecha_servidor);
   } finally {

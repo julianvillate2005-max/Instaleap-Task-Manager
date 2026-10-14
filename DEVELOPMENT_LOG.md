@@ -130,3 +130,35 @@ No se deben registrar como verificadas funcionalidades que todavía no se hayan 
 - Registrar resultados concretos de las pruebas.
 - Documentar las instrucciones definitivas de instalación y ejecución.
 - Registrar los commits posteriores a `68abdc1`.
+
+## Hito: centralización y validación de la configuración
+
+**Cambios realizados**
+
+- Se creó `src/config/env.ts` para centralizar la carga y lectura de las variables de entorno.
+- Se implementó `obtenerPuerto()` para comprobar que los puertos sean números enteros dentro del rango válido.
+- Se implementó `obtenerVariableObligatoria()` para detectar variables requeridas que no existan o estén vacías.
+- Se modificó `src/config/database.ts` para utilizar la configuración centralizada al crear el pool de conexiones de PostgreSQL.
+- Se modificó `src/app.ts` para utilizar `env.port` y eliminar la carga duplicada de variables de entorno.
+
+**Decisiones técnicas**
+
+1. Centralizar la configuración en un módulo independiente para evitar que diferentes archivos gestionen las variables de entorno por separado.
+2. Validar los puertos y las variables obligatorias al cargar la configuración, con el objetivo de detectar errores antes de iniciar el servidor.
+
+**Verificaciones realizadas**
+
+- `npm run build`: compilación completada sin errores.
+- `npm run dev`: se estableció la conexión con PostgreSQL y el servidor Express inició en el puerto 3000.
+- `git diff --check`: no reportó problemas de espacios en blanco.
+- `git check-ignore -v .env`: confirmó que `.env` continúa excluido de Git.
+
+**Uso de asistencia de IA**
+
+Se utilizó ChatGPT para orientar la organización de la configuración, proponer modificaciones de código y explicar los comandos de Git y PowerShell. Los cambios se incorporaron al proyecto y se verificaron mediante la compilación y el inicio de la aplicación.
+
+**Pendiente de completar**
+
+- Probar explícitamente el endpoint `GET /health`.
+- Probar el comportamiento cuando falta una variable obligatoria.
+- Registrar los prompts exactos utilizados y la evaluación individual de las sugerencias de IA, según los requisitos de la prueba técnica.
