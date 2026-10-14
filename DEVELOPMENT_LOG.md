@@ -162,3 +162,30 @@ Se utilizó ChatGPT para orientar la organización de la configuración, propone
 - Probar explícitamente el endpoint `GET /health`.
 - Probar el comportamiento cuando falta una variable obligatoria.
 - Registrar los prompts exactos utilizados y la evaluación individual de las sugerencias de IA, según los requisitos de la prueba técnica.
+
+## Hito: creación y verificación del esquema de PostgreSQL
+
+**Cambios realizados**
+
+- Se creó el esquema SQL para las tablas `users` y `tasks`.
+- Se establecieron restricciones para los correos electrónicos, los estados de las tareas y la relación entre usuarios y tareas.
+- Se añadió un índice para facilitar la consulta de tareas por usuario.
+- Se crearon scripts de desarrollo para inicializar el esquema y comprobar la existencia de las tablas.
+
+**Verificaciones realizadas**
+
+- La aplicación estableció una conexión con PostgreSQL.
+- Se ejecutó la inicialización del esquema.
+- El script `check-database.ts` confirmó la existencia de las tablas `tasks` y `users`.
+
+**Decisiones técnicas**
+
+- Se eligió PostgreSQL como sistema de gestión de base de datos.
+- Se estableció una relación entre usuarios y tareas mediante una clave foránea.
+- Se definió un conjunto limitado de estados válidos para las tareas.
+
+**Pendiente**
+
+- Implementar el registro y el inicio de sesión.
+- Incorporar el hash de contraseñas y la autenticación JWT.
+- Añadir pruebas automatizadas para la persistencia y la autenticación.
