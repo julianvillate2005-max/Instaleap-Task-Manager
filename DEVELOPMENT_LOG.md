@@ -189,3 +189,49 @@ Se utilizó ChatGPT para orientar la organización de la configuración, propone
 - Implementar el registro y el inicio de sesión.
 - Incorporar el hash de contraseñas y la autenticación JWT.
 - Añadir pruebas automatizadas para la persistencia y la autenticación.
+
+## Hito: incorporación de validaciones para el registro de usuarios
+
+### Cambios realizados
+
+- Se instaló AJV para validar datos mediante esquemas JSON.
+- Se instaló bcrypt para preparar el manejo seguro de contraseñas.
+- Se instaló jsonwebtoken para preparar la implementación de autenticación mediante JWT.
+- Se creó `src/utils/validation.ts` con la interfaz `RegistroUsuarioDTO`, el esquema de validación y la función `validarRegistroUsuario`.
+- Se establecieron restricciones para el nombre, el correo electrónico y la contraseña.
+- Se configuró una validación básica del formato del correo electrónico mediante una expresión regular.
+- Se creó `src/utils/test-validation.ts` para ejecutar comprobaciones manuales con datos válidos e inválidos.
+
+### Decisiones técnicas
+
+1. Utilizar AJV y un esquema JSON para centralizar las reglas de validación y facilitar su reutilización en el registro de usuarios.
+2. Rechazar propiedades adicionales mediante `additionalProperties: false`, para limitar los campos aceptados por el esquema.
+3. Definir una longitud máxima de 72 caracteres para la contraseña, teniendo en cuenta las limitaciones de bcrypt y la necesidad de establecer una política de contraseñas coherente.
+
+### Verificaciones realizadas
+
+- `npx tsx src/utils/test-validation.ts`: el objeto válido fue aceptado y el inválido fue rechazado.
+- Se detectaron errores de longitud en el nombre y la contraseña, y un error de formato en el correo electrónico.
+- `npm run build`: compilación de TypeScript completada sin errores.
+- `git diff --check`: no reportó errores de espacios en blanco; únicamente aparecieron advertencias relacionadas con finales de línea LF/CRLF en archivos de configuración.
+
+### Limitaciones actuales
+
+- La función de validación todavía no está conectada al endpoint `POST /auth/register`.
+- La expresión regular comprueba un formato básico, pero no demuestra que el correo electrónico exista.
+- La prueba de validación es un script manual; todavía no se ha integrado un framework de pruebas automatizadas.
+- La instalación de bcrypt y jsonwebtoken no significa que el registro, el hash de contraseñas o la autenticación JWT estén implementados.
+
+### Uso de inteligencia artificial
+
+Se utilizó ChatGPT para explicar AJV, TypeScript, JSON Schema y las reglas de validación; orientar la implementación y ayudar a interpretar los resultados de las pruebas. Se revisaron la compilación y el comportamiento del script de validación.
+
+Los prompts exactos y la evaluación individual de las sugerencias deben completarse utilizando el historial real de la interacción, sin presentar resúmenes como si fueran transcripciones literales.
+
+### Pendientes
+
+- Integrar la validación con el controlador del registro.
+- Implementar el registro de usuarios y la persistencia en PostgreSQL.
+- Aplicar bcrypt al almacenamiento de contraseñas.
+- Añadir pruebas automatizadas.
+- Registrar los resultados de las siguientes verificaciones y los commits correspondientes.
