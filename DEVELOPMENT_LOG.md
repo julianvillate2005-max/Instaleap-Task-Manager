@@ -113,23 +113,19 @@ No se deben registrar como verificadas funcionalidades que todavía no se hayan 
 
 ## 7. Próximos pasos
 
-- Crear y verificar las tablas de usuarios y tareas.
-- Centralizar y validar la configuración del entorno.
-- Implementar el registro y el inicio de sesión.
-- Implementar autenticación JWT y autorización por propietario.
-- Implementar el CRUD de tareas.
-- Añadir validaciones y manejo centralizado de errores.
-- Documentar los endpoints con Swagger.
-- Implementar pruebas.
-- Completar el README, revisar la bitácora y preparar los entregables finales.
+- Completar las pruebas automatizadas de la API.
+- Verificar el comportamiento de Swagger UI al ejecutar la versión compilada con `npm start`.
+- Revisar y completar las instrucciones de instalación y ejecución del README.
+- Ampliar el registro de prompts y la evaluación de las sugerencias de inteligencia artificial.
+- Revisar los requisitos restantes de la prueba técnica y preparar los entregables finales.
 
 ## 8. Pendientes de documentación
 
-- Registrar las decisiones técnicas independientes adicionales a medida que se tomen.
-- Añadir prompts exactos relevantes y documentar las sugerencias aceptadas o rechazadas.
-- Registrar resultados concretos de las pruebas.
-- Documentar las instrucciones definitivas de instalación y ejecución.
-- Registrar los commits posteriores a `68abdc1`.
+- Registrar los prompts exactos relevantes y la evaluación individual de las sugerencias de IA, según la evidencia disponible.
+- Completar y documentar las pruebas automatizadas de la API.
+- Verificar Swagger UI mediante la versión compilada con npm start.
+- Revisar y completar las instrucciones definitivas de instalación y ejecución en el README.
+- Revisar los requisitos restantes de la prueba técnica y preparar los entregables finales.
 
 ## Hito: centralización y validación de la configuración
 
@@ -264,3 +260,96 @@ Se utilizó asistencia de IA para orientar la implementación de la validación,
 **Pendientes**
 
 Continuar con el inicio de sesión, la autenticación mediante JWT, la protección de rutas y las operaciones CRUD de tareas. Completar el registro de prompts exactos y las decisiones de aceptación o rechazo de sugerencias de IA según la evidencia disponible.
+
+---
+
+## Hito: autenticación JWT y operaciones CRUD de tareas
+
+### Cambios realizados
+
+- Se implementó el inicio de sesión mediante `POST /auth/login`.
+- Se incorporó la generación de tokens JWT con una vigencia de una hora.
+- Se implementó el middleware de autenticación para validar el encabezado `Authorization: Bearer <token>`.
+- Se protegieron las rutas de tareas mediante autenticación.
+- Se implementaron las operaciones de creación, consulta, actualización y eliminación de tareas.
+- Se restringió el acceso a las tareas mediante el identificador del usuario autenticado, evitando que un usuario consulte o modifique las tareas de otro.
+- Se incorporaron validaciones para los datos de las tareas y para los identificadores recibidos en las rutas.
+
+### Verificaciones realizadas
+
+- Inicio de sesión correcto: se obtuvo un token JWT.
+- Contraseña incorrecta: respuesta HTTP 401.
+- Solicitud a una ruta protegida sin token: respuesta HTTP 401.
+- Operaciones CRUD de tareas: se comprobaron respuestas satisfactorias.
+- Acceso a tareas pertenecientes a otro usuario: respuesta HTTP 404.
+- Consulta de una tarea inexistente: respuesta HTTP 404.
+- `npm run build`: compilación completada sin errores.
+
+### Commit relacionado
+
+`751c5fa` — `feat: implement JWT authentication and task CRUD`
+
+---
+
+## Hito: manejo centralizado de errores
+
+### Cambios realizados
+
+- Se incorporó el middleware centralizado de errores en `src/api/middlewares/error.middleware.ts`.
+- Se configuró su registro después de las rutas de la aplicación.
+- Se normalizaron las respuestas para determinados errores de validación, autenticación y acceso a recursos.
+
+### Verificaciones realizadas
+
+- JSON mal formado: respuesta HTTP 400.
+- Correo duplicado durante el registro: respuesta HTTP 409.
+- Credenciales incorrectas: respuesta HTTP 401.
+- `git diff --check`: no reportó errores de espacios en blanco en la revisión correspondiente.
+
+### Commit relacionado
+
+`3b377fb` — `feat: centralize API error handling`
+
+---
+
+## Hito: documentación OpenAPI e integración de Swagger UI
+
+### Cambios realizados
+
+- Se instalaron `swagger-jsdoc` y `swagger-ui-express`, junto con sus definiciones de tipos.
+- Se creó `src/config/swagger.ts` para configurar la especificación OpenAPI.
+- Se documentaron las rutas de autenticación y las operaciones de tareas.
+- Se configuró el esquema de seguridad Bearer JWT en Swagger UI.
+- Se habilitó la documentación interactiva en `/api-docs`.
+- Se creó `src/public/swagger-custom.js` para incorporar un botón personalizado que copia únicamente el campo `token` de la respuesta del inicio de sesión.
+- Se configuró Express para servir el archivo JavaScript personalizado.
+- Se actualizó el proceso de compilación para copiar los archivos estáticos de Swagger a `dist/public`.
+
+### Verificaciones realizadas
+
+- La documentación interactiva se abrió en Swagger UI y se mostraron los grupos de autenticación y tareas.
+- La petición a `/swagger-assets/swagger-custom.js` respondió HTTP 200.
+- El botón personalizado mostró el mensaje `JWT copiado`.
+- `npm run build` terminó sin errores después de incorporar la copia de archivos estáticos.
+- `Test-Path dist/public/swagger-custom.js` devolvió `True`.
+- `git diff --check` no reportó errores de espacios en blanco; aparecieron advertencias relacionadas con los finales de línea LF/CRLF de Windows.
+
+### Commit relacionado
+
+`db363b2` — `feat: add Swagger API documentation and JWT copy button`
+
+### Pendientes de verificación
+
+- Confirmar que el botón personalizado funciona al ejecutar la versión compilada con `npm start`.
+- Completar las pruebas automatizadas y documentar sus resultados.
+- Revisar los requisitos restantes de la prueba técnica antes de preparar la entrega final.
+
+---
+
+## Registro de uso de inteligencia artificial
+
+Se utilizó ChatGPT como apoyo para explicar conceptos, proponer modificaciones de código, orientar las pruebas manuales y revisar los resultados de los comandos de compilación y Git.
+
+Las sugerencias se incorporaron después de revisar el código y comprobar su comportamiento. Los resultados se documentaron con base en las verificaciones realizadas, manteniendo como pendientes las pruebas que todavía no cuentan con confirmación.
+
+Los prompts exactos y la evaluación individual de las sugerencias deben ampliarse a partir del historial real de la interacción, sin presentar resúmenes como transcripciones literales.
