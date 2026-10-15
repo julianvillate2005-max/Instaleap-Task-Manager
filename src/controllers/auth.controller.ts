@@ -1,9 +1,8 @@
+
 import type { Request, Response, NextFunction } from "express";
 import {
   registrarUsuario,
   iniciarSesion,
-  EmailEnUsoError,
-  CredencialesInvalidasError,
 } from "../services/user.service.js";
 import { validarRegistroUsuario } from "../utils/validation.js";
 
@@ -28,17 +27,9 @@ export async function registrar(
       usuario,
     });
   } catch (error) {
-    if (error instanceof EmailEnUsoError) {
-      res.status(409).json({
-        mensaje: error.message,
-      });
-      return;
-    }
-
     next(error);
   }
 }
-
 
 export async function login(
   req: Request,
@@ -66,13 +57,6 @@ export async function login(
       token: resultado.token,
     });
   } catch (error) {
-    if (error instanceof CredencialesInvalidasError) {
-      res.status(401).json({
-        mensaje: error.message,
-      });
-      return;
-    }
-
     next(error);
   }
 }

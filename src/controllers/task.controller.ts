@@ -1,4 +1,3 @@
-
 import type { Request, Response, NextFunction } from "express";
 import { validarCrearTarea } from "../utils/task.validation.js";
 import {
@@ -7,14 +6,12 @@ import {
   obtenerTarea,
   actualizarTarea,
   eliminarTarea,
-  TareaNoEncontradaError,
 } from "../services/task.service.js";
 import type { CrearTareaDTO } from "../persistence/task.repository.js";
 
 function obtenerUsuarioAutenticado(res: Response): string {
   return res.locals.userId as string;
 }
-
 
 function obtenerIdTarea(req: Request): string | null {
   const id = req.params.id;
@@ -25,7 +22,6 @@ function obtenerIdTarea(req: Request): string | null {
 
   return id;
 }
-
 
 function validarIdTarea(
   req: Request,
@@ -104,11 +100,6 @@ export async function obtenerPorId(
 
     res.status(200).json({ tarea });
   } catch (error) {
-    if (error instanceof TareaNoEncontradaError) {
-      res.status(404).json({ mensaje: error.message });
-      return;
-    }
-
     next(error);
   }
 }
@@ -143,11 +134,6 @@ export async function actualizar(
       tarea,
     });
   } catch (error) {
-    if (error instanceof TareaNoEncontradaError) {
-      res.status(404).json({ mensaje: error.message });
-      return;
-    }
-
     next(error);
   }
 }
@@ -173,11 +159,6 @@ export async function eliminar(
       mensaje: "Tarea eliminada correctamente.",
     });
   } catch (error) {
-    if (error instanceof TareaNoEncontradaError) {
-      res.status(404).json({ mensaje: error.message });
-      return;
-    }
-
     next(error);
   }
 }

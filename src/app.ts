@@ -4,10 +4,12 @@ import { env } from "./config/env.js";
 import { verificarConexion } from "./config/database.js";
 import authRoutes from "./api/routes/auth.routes.js";
 import taskRoutes from "./api/routes/task.routes.js";
+import { manejarErrores } from "./api/middlewares/error.middleware.js";
 
 const app = express();
 
 app.use(express.json());
+
 app.use("/tasks", taskRoutes);
 app.use("/auth", authRoutes);
 
@@ -17,6 +19,9 @@ app.get("/health", (_req, res) => {
     message: "Task Manager API is running",
   });
 });
+
+// Debe registrarse después de las rutas.
+app.use(manejarErrores);
 
 /**
  * Comprueba la conexión con PostgreSQL
