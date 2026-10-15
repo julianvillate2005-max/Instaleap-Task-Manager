@@ -1,14 +1,31 @@
-
 import express from "express";
 import { env } from "./config/env.js";
 import { verificarConexion } from "./config/database.js";
 import authRoutes from "./api/routes/auth.routes.js";
 import taskRoutes from "./api/routes/task.routes.js";
 import { manejarErrores } from "./api/middlewares/error.middleware.js";
+import swaggerUi from "swagger-ui-express";
+import { especificacionSwagger } from "./config/swagger.js";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const directorioActual = path.dirname(fileURLToPath(import.meta.url));
+const directorioPublico = path.join(directorioActual, "public");
 
 const app = express();
 
 app.use(express.json());
+
+// Sirve los archivos personalizados de Swagger UI.
+app.use("/swagger-assets", express.static(directorioPublico));
+
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(especificacionSwagger, {
+    customJs: "/swagger-assets/swagger-custom.js",
+  })
+);
 
 app.use("/tasks", taskRoutes);
 app.use("/auth", authRoutes);
