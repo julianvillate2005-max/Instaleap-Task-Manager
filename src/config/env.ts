@@ -51,4 +51,5 @@ export const env = {
     user: obtenerVariableObligatoria("DB_USER"),
     password: obtenerVariableObligatoria("DB_PASSWORD"),
   },
+  jwtSecret: obtenerVariableObligatoria("JWT_SECRET"),
 };
