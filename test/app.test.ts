@@ -72,6 +72,18 @@ describe("Pruebas HTTP de la API", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
+it("POST /tasks rechaza una fecha con un día inexistente", async () => {
+  const response = await request(app)
+    .post("/tasks")
+    .set("Authorization", `Bearer ${crearTokenPrueba()}`)
+    .send({
+      titulo: "Tarea con fecha inexistente",
+      fecha_vencimiento: "2026-02-30T14:30:00.000Z",
+    });
+
+  expect(response.status).toBe(400);
+  expect(crearTareaMock).not.toHaveBeenCalled();
+});
 
   it("GET /health devuelve HTTP 200 y estado ok", async () => {
     const response = await request(app).get("/health");
@@ -256,6 +268,59 @@ describe("Pruebas HTTP de la API", () => {
     expect(response.status).toBe(400);
     expect(crearTareaMock).not.toHaveBeenCalled();
   });
+
+it("POST /tasks rechaza una fecha de vencimiento inválida", async () => {
+  const response = await request(app)
+    .post("/tasks")
+    .set("Authorization", `Bearer ${crearTokenPrueba()}`)
+    .send({
+      titulo: "Tarea con fecha inválida",
+      fecha_vencimiento: "2026-99-99T25:61:00",
+    });
+
+  expect(response.status).toBe(400);
+  expect(crearTareaMock).not.toHaveBeenCalled();
+});
+
+
+it("POST /tasks acepta una fecha ISO válida", async () => {
+  const fechaValida = "2026-10-15T14:30:00.000Z";
+
+  crearTareaMock.mockResolvedValue({
+    ...tareaPrueba,
+    fecha_vencimiento: new Date(fechaValida),
+  });
+
+  const response = await request(app)
+    .post("/tasks")
+    .set("Authorization", `Bearer ${crearTokenPrueba()}`)
+    .send({
+      titulo: "Tarea con fecha válida",
+      fecha_vencimiento: fechaValida,
+    });
+
+  expect(response.status).toBe(201);
+  expect(crearTareaMock).toHaveBeenCalledWith(
+    usuarioPrueba.id,
+    expect.objectContaining({
+      titulo: "Tarea con fecha válida",
+      fecha_vencimiento: fechaValida,
+    })
+  );
+});
+
+it("POST /tasks rechaza una fecha con formato ambiguo", async () => {
+  const response = await request(app)
+    .post("/tasks")
+    .set("Authorization", `Bearer ${crearTokenPrueba()}`)
+    .send({
+      titulo: "Tarea con fecha ambigua",
+      fecha_vencimiento: "15/10/2026",
+    });
+
+  expect(response.status).toBe(400);
+  expect(crearTareaMock).not.toHaveBeenCalled();
+});
 
   it("GET /tasks/:id devuelve una tarea del usuario", async () => {
     buscarTareaMock.mockResolvedValue(tareaPrueba);
