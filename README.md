@@ -147,7 +147,7 @@ Authorization: Bearer <token>
 
 Con el servidor en ejecución, abre:
 
-[http://localhost:3000/api-docs](http://localhost:3000/api-docs)
+http://localhost:3000/api-docs
 
 Desde Swagger UI puedes consultar los endpoints documentados y probar las solicitudes.
 
