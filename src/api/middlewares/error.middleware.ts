@@ -1,8 +1,26 @@
 
 import type { ErrorRequestHandler } from "express";
-import { EmailEnUsoError, CredencialesInvalidasError } from "../../services/user.service.js";
+import {
+  EmailEnUsoError,
+  CredencialesInvalidasError,
+} from "../../services/user.service.js";
 import { TareaNoEncontradaError } from "../../services/task.service.js";
 
+/**
+ * Middleware centralizado para transformar errores de la aplicación
+ * en respuestas HTTP con mensajes JSON.
+ *
+ * Gestiona errores de sintaxis JSON, correos duplicados, credenciales
+ * incorrectas y tareas inexistentes o no accesibles. Los errores
+ * inesperados se registran internamente y generan una respuesta 500
+ * sin exponer detalles técnicos al cliente.
+ *
+ * @param error Error recibido durante el procesamiento de la solicitud.
+ * @param _req Solicitud HTTP de Express, no utilizada directamente.
+ * @param res Respuesta HTTP utilizada para devolver el error.
+ * @param _next Siguiente middleware de Express, no utilizado directamente.
+ * @returns No devuelve un valor; envía la respuesta HTTP correspondiente.
+ */
 export const manejarErrores: ErrorRequestHandler = (
   error: unknown,
   _req,

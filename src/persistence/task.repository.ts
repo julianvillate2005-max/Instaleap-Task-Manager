@@ -1,25 +1,53 @@
 
 import { database } from "../config/database.js";
 
+/**
+ * Estados permitidos para una tarea.
+ */
 export type EstadoTarea = "pendiente" | "en curso" | "completada";
 
+/**
+ * Representa una tarea almacenada en la base de datos.
+ */
 export interface Tarea {
+  /** Identificador único de la tarea. */
   id: string;
+  /** Título de la tarea. */
   titulo: string;
+  /** Descripción de la tarea, si está disponible. */
   descripcion: string | null;
+  /** Fecha límite de la tarea, si está definida. */
   fecha_vencimiento: Date | null;
+  /** Estado actual de la tarea. */
   estado: EstadoTarea;
+  /** Identificador del usuario propietario de la tarea. */
   user_id: string;
+  /** Fecha de creación de la tarea. */
   created_at: Date;
 }
 
+/**
+ * Datos aceptados para crear o actualizar una tarea.
+ */
 export interface CrearTareaDTO {
+  /** Título de la tarea. */
   titulo: string;
+  /** Descripción opcional de la tarea. */
   descripcion?: string | null;
+  /** Fecha de vencimiento opcional en formato de texto. */
   fecha_vencimiento?: string | null;
+  /** Estado opcional; por defecto se utiliza "pendiente". */
   estado?: EstadoTarea;
 }
 
+/**
+ * Crea una tarea y la asocia al usuario indicado.
+ *
+ * @param userId - Identificador del usuario propietario.
+ * @param datos - Datos de la tarea que se va a crear.
+ * @returns Una promesa con la tarea creada.
+ * @throws {Error} Si la consulta no devuelve la tarea creada.
+ */
 export async function crearTarea(
   userId: string,
   datos: CrearTareaDTO
@@ -48,6 +76,12 @@ export async function crearTarea(
   return tarea;
 }
 
+/**
+ * Recupera las tareas de un usuario, ordenadas desde la más reciente.
+ *
+ * @param userId - Identificador del usuario propietario.
+ * @returns Una promesa con las tareas encontradas; puede ser una lista vacía.
+ */
 export async function listarTareasPorUsuario(
   userId: string
 ): Promise<Tarea[]> {
@@ -63,6 +97,14 @@ export async function listarTareasPorUsuario(
   return resultado.rows;
 }
 
+/**
+ * Busca una tarea que pertenezca al usuario indicado.
+ *
+ * @param userId - Identificador del usuario propietario.
+ * @param tareaId - Identificador de la tarea que se desea consultar.
+ * @returns Una promesa con la tarea encontrada o null si no existe
+ * o no pertenece al usuario.
+ */
 export async function buscarTareaPorId(
   userId: string,
   tareaId: string
@@ -78,7 +120,15 @@ export async function buscarTareaPorId(
   return resultado.rows[0] ?? null;
 }
 
-
+/**
+ * Actualiza los datos de una tarea perteneciente al usuario indicado.
+ *
+ * @param userId - Identificador del usuario propietario.
+ * @param tareaId - Identificador de la tarea que se actualizará.
+ * @param datos - Nuevos datos de la tarea.
+ * @returns Una promesa con la tarea actualizada o null si no existe
+ * o no pertenece al usuario.
+ */
 export async function actualizarTarea(
   userId: string,
   tareaId: string,
@@ -106,6 +156,13 @@ export async function actualizarTarea(
   return resultado.rows[0] ?? null;
 }
 
+/**
+ * Elimina una tarea únicamente si pertenece al usuario indicado.
+ *
+ * @param userId - Identificador del usuario propietario.
+ * @param tareaId - Identificador de la tarea que se desea eliminar.
+ * @returns Una promesa que indica si se eliminó exactamente una tarea.
+ */
 export async function eliminarTarea(
   userId: string,
   tareaId: string

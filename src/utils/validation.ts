@@ -1,5 +1,13 @@
+
 import { Ajv, type JSONSchemaType } from "ajv";
 
+/**
+ * Estructura de los datos requeridos para registrar un usuario.
+ *
+ * @property nombre Nombre del usuario, entre 2 y 100 caracteres.
+ * @property email Dirección de correo electrónico válida, entre 5 y 255 caracteres.
+ * @property password Contraseña de entre 8 y 72 caracteres.
+ */
 export interface RegistroUsuarioDTO {
   nombre: string;
   email: string;
@@ -30,7 +38,7 @@ const esquemaRegistroUsuario: JSONSchemaType<RegistroUsuarioDTO> = {
   additionalProperties: false,
 };
 
-const ajv = new Ajv ({ allErrors: true });
+const ajv = new Ajv({ allErrors: true });
 
 ajv.addFormat("email", {
   type: "string",
@@ -38,5 +46,14 @@ ajv.addFormat("email", {
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
 });
 
+/**
+ * Validador compilado de AJV para los datos de registro.
+ *
+ * Comprueba los campos obligatorios, sus tipos y restricciones,
+ * el formato del correo electrónico y la ausencia de propiedades
+ * adicionales, según el esquema definido.
+ *
+ * @returns Una función de validación que comprueba los datos de registro.
+ */
 export const validarRegistroUsuario =
   ajv.compile<RegistroUsuarioDTO>(esquemaRegistroUsuario);

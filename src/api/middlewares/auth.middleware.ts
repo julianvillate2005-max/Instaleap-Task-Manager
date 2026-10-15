@@ -3,6 +3,23 @@ import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { env } from "../../config/env.js";
 
+
+/**
+ * Middleware de Express que autentica las solicitudes mediante un token JWT.
+ *
+ * Comprueba que exista un encabezado Authorization con el esquema Bearer,
+ * verifica el token y almacena el identificador del usuario en res.locals.
+ * Si la autenticación es válida, permite continuar con next().
+ *
+ * @param req - Solicitud HTTP que contiene el encabezado Authorization.
+ * @param res - Respuesta de Express utilizada para almacenar el usuario autenticado
+ * o devolver una respuesta HTTP 401 cuando el token no es válido.
+ * @param next - Función que permite continuar con el siguiente middleware
+ * o controlador.
+ * @returns No devuelve un valor; continúa la cadena de middleware o responde
+ * con un error de autenticación.
+ */
+
 export function autenticarToken(
   req: Request,
   res: Response,

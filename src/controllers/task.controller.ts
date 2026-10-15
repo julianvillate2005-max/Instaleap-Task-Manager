@@ -1,3 +1,4 @@
+
 import type { Request, Response, NextFunction } from "express";
 import { validarCrearTarea } from "../utils/task.validation.js";
 import {
@@ -9,10 +10,25 @@ import {
 } from "../services/task.service.js";
 import type { CrearTareaDTO } from "../persistence/task.repository.js";
 
+/**
+ * Obtiene el identificador del usuario autenticado desde los datos
+ * almacenados en la respuesta por el middleware de autenticación.
+ *
+ * @param res - Objeto de respuesta de Express.
+ * @returns Identificador del usuario autenticado.
+ */
 function obtenerUsuarioAutenticado(res: Response): string {
   return res.locals.userId as string;
 }
 
+/**
+ * Extrae y valida el identificador de una tarea desde los parámetros
+ * de la solicitud.
+ *
+ * @param req - Solicitud HTTP de Express.
+ * @returns El identificador si es un entero positivo representado como texto;
+ * de lo contrario, null.
+ */
 function obtenerIdTarea(req: Request): string | null {
   const id = req.params.id;
 
@@ -23,6 +39,14 @@ function obtenerIdTarea(req: Request): string | null {
   return id;
 }
 
+/**
+ * Valida el identificador de la tarea y envía una respuesta HTTP 400
+ * cuando el formato del identificador no es válido.
+ *
+ * @param req - Solicitud HTTP de Express.
+ * @param res - Objeto de respuesta de Express.
+ * @returns El identificador válido o null si la validación falla.
+ */
 function validarIdTarea(
   req: Request,
   res: Response
@@ -40,6 +64,15 @@ function validarIdTarea(
   return id;
 }
 
+/**
+ * Crea una tarea para el usuario autenticado después de validar los datos.
+ *
+ * @param req - Solicitud que contiene los datos de la tarea en el cuerpo.
+ * @param res - Objeto de respuesta de Express.
+ * @param next - Función para delegar errores al middleware correspondiente.
+ * @returns Una promesa que se resuelve sin devolver un valor.
+ * @throws Los errores capturados se delegan a next para su tratamiento.
+ */
 export async function crear(
   req: Request,
   res: Response,
@@ -65,6 +98,15 @@ export async function crear(
   }
 }
 
+/**
+ * Lista las tareas asociadas al usuario autenticado.
+ *
+ * @param _req - Solicitud HTTP de Express, no utilizada en este controlador.
+ * @param res - Objeto de respuesta de Express.
+ * @param next - Función para delegar errores al middleware correspondiente.
+ * @returns Una promesa que se resuelve sin devolver un valor.
+ * @throws Los errores capturados se delegan a next para su tratamiento.
+ */
 export async function listar(
   _req: Request,
   res: Response,
@@ -81,6 +123,15 @@ export async function listar(
   }
 }
 
+/**
+ * Obtiene una tarea por su identificador para el usuario autenticado.
+ *
+ * @param req - Solicitud HTTP que contiene el identificador en los parámetros.
+ * @param res - Objeto de respuesta de Express.
+ * @param next - Función para delegar errores al middleware correspondiente.
+ * @returns Una promesa que se resuelve sin devolver un valor.
+ * @throws Los errores capturados se delegan a next para su tratamiento.
+ */
 export async function obtenerPorId(
   req: Request,
   res: Response,
@@ -104,6 +155,16 @@ export async function obtenerPorId(
   }
 }
 
+/**
+ * Actualiza una tarea del usuario autenticado después de validar
+ * el identificador y los datos recibidos.
+ *
+ * @param req - Solicitud HTTP con el identificador y los datos de la tarea.
+ * @param res - Objeto de respuesta de Express.
+ * @param next - Función para delegar errores al middleware correspondiente.
+ * @returns Una promesa que se resuelve sin devolver un valor.
+ * @throws Los errores capturados se delegan a next para su tratamiento.
+ */
 export async function actualizar(
   req: Request,
   res: Response,
@@ -138,6 +199,15 @@ export async function actualizar(
   }
 }
 
+/**
+ * Elimina una tarea perteneciente al usuario autenticado.
+ *
+ * @param req - Solicitud HTTP que contiene el identificador de la tarea.
+ * @param res - Objeto de respuesta de Express.
+ * @param next - Función para delegar errores al middleware correspondiente.
+ * @returns Una promesa que se resuelve sin devolver un valor.
+ * @throws Los errores capturados se delegan a next para su tratamiento.
+ */
 export async function eliminar(
   req: Request,
   res: Response,

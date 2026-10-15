@@ -1,5 +1,14 @@
+
 import swaggerJsdoc from "swagger-jsdoc";
 
+/**
+ * Configuración de Swagger para generar la especificación OpenAPI
+ * de Instaleap Task Manager.
+ *
+ * Define la información general de la API, el servidor local,
+ * el esquema de autenticación Bearer mediante JWT y los archivos
+ * de rutas que contienen las anotaciones OpenAPI.
+ */
 const opcionesSwagger: swaggerJsdoc.Options = {
   definition: {
     openapi: "3.0.0",
@@ -29,4 +38,10 @@ const opcionesSwagger: swaggerJsdoc.Options = {
   apis: ["./src/api/routes/*.ts"],
 };
 
+/**
+ * Especificación OpenAPI generada a partir de la configuración
+ * de Swagger y las anotaciones presentes en los archivos de rutas.
+ *
+ * Se utiliza para exponer la documentación interactiva de la API.
+ */
 export const especificacionSwagger = swaggerJsdoc(opcionesSwagger);

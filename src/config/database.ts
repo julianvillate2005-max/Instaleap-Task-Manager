@@ -13,9 +13,19 @@ export const database = new Pool({
   password: env.database.password,
 });
 
+
 /**
- * Comprueba que la aplicación pueda conectarse a PostgreSQL.
+ * Comprueba que la aplicación pueda conectarse a PostgreSQL mediante
+ * una consulta que obtiene la fecha y hora del servidor.
+ *
+ * Libera la conexión utilizada después de ejecutar la consulta,
+ * incluso si esta produce un error.
+ *
+ * @returns Una promesa que se resuelve cuando finaliza la comprobación.
+ * @throws Propaga los errores producidos al obtener la conexión
+ * o ejecutar la consulta.
  */
+
 export async function verificarConexion(): Promise<void> {
   const client = await database.connect();
 

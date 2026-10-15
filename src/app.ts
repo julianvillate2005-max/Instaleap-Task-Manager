@@ -1,3 +1,4 @@
+
 import express from "express";
 import { env } from "./config/env.js";
 import { verificarConexion } from "./config/database.js";
@@ -30,6 +31,12 @@ app.use(
 app.use("/tasks", taskRoutes);
 app.use("/auth", authRoutes);
 
+/**
+ * Endpoint de comprobación de disponibilidad de la API.
+ *
+ * @param _req - Solicitud HTTP de Express, no utilizada.
+ * @param res - Respuesta HTTP que contiene el estado de la aplicación.
+ */
 app.get("/health", (_req, res) => {
   res.status(200).json({
     status: "ok",
@@ -39,11 +46,23 @@ app.get("/health", (_req, res) => {
 
 // Debe registrarse después de las rutas.
 app.use(manejarErrores);
+
+/**
+ * Aplicación Express configurada con las rutas, la documentación
+ * Swagger, el endpoint de salud y el middleware de errores.
+ */
 export default app;
 
 /**
- * Comprueba la conexión con PostgreSQL
- * antes de iniciar el servidor HTTP.
+ * Comprueba la conexión con PostgreSQL antes de iniciar
+ * el servidor HTTP.
+ *
+ * Si la conexión se establece correctamente, inicia el servidor
+ * en el puerto configurado. Si ocurre un error, lo registra
+ * y establece un código de salida distinto de cero.
+ *
+ * @returns Una promesa que se resuelve cuando termina el proceso
+ * de inicialización del servidor.
  */
 async function iniciarServidor(): Promise<void> {
   try {
