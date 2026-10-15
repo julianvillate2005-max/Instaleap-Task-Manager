@@ -39,6 +39,7 @@ app.get("/health", (_req, res) => {
 
 // Debe registrarse después de las rutas.
 app.use(manejarErrores);
+export default app;
 
 /**
  * Comprueba la conexión con PostgreSQL
@@ -59,4 +60,11 @@ async function iniciarServidor(): Promise<void> {
   }
 }
 
-iniciarServidor();
+// Inicia el servidor únicamente cuando este archivo
+// se ejecuta directamente, no cuando se importa en las pruebas.
+if (
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+) {
+  iniciarServidor();
+}
