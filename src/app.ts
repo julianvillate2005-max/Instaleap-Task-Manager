@@ -2,10 +2,12 @@
 import express from "express";
 import { env } from "./config/env.js";
 import { verificarConexion } from "./config/database.js";
+import authRoutes from "./api/routes/auth.routes.js";
 
 const app = express();
 
 app.use(express.json());
+app.use("/auth", authRoutes);
 
 app.get("/health", (_req, res) => {
   res.status(200).json({

@@ -235,3 +235,32 @@ Los prompts exactos y la evaluación individual de las sugerencias deben complet
 - Aplicar bcrypt al almacenamiento de contraseñas.
 - Añadir pruebas automatizadas.
 - Registrar los resultados de las siguientes verificaciones y los commits correspondientes.
+
+## Hito: implementación y pruebas del registro de usuarios
+
+**Funcionalidad implementada**
+
+Se desarrolló el endpoint `POST /auth/register` utilizando Express y TypeScript. La lógica de negocio se separó en un servicio y las consultas a PostgreSQL se organizaron en un repositorio.
+
+**Aspectos técnicos**
+
+- Validación de los datos de entrada mediante AJV y un esquema JSON.
+- Hash de contraseñas con bcrypt antes de almacenarlas.
+- Consulta de usuarios por correo electrónico para evitar registros duplicados.
+- Respuestas HTTP diferenciadas para registro exitoso, datos inválidos y correo ya registrado.
+- Exclusión del hash de contraseña de la respuesta HTTP.
+
+**Verificaciones realizadas**
+
+- `npm run build`: finalizó sin errores.
+- Registro con datos válidos: respondió correctamente con HTTP 201.
+- Registro con un correo existente: respondió HTTP 409.
+- Registro con correo inválido y contraseña inferior al mínimo permitido: respondió HTTP 400.
+
+**Uso de herramientas de IA**
+
+Se utilizó asistencia de IA para orientar la implementación de la validación, el repositorio de usuarios, el servicio de registro y el controlador HTTP. El código se compiló y el endpoint se probó mediante peticiones HTTP desde PowerShell.
+
+**Pendientes**
+
+Continuar con el inicio de sesión, la autenticación mediante JWT, la protección de rutas y las operaciones CRUD de tareas. Completar el registro de prompts exactos y las decisiones de aceptación o rechazo de sugerencias de IA según la evidencia disponible.
